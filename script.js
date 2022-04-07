@@ -1,58 +1,80 @@
 // Global Variables
 let displayValue;
+let currentOperator;
+let inputA;
+let inputB;
+let operatorActive = false;
+let inputMode = "A";
 
 
 // HTML Selectors
 const display = document.querySelector("#display");
 const clearButton = document.querySelector("#clear");
-const numberButtons = document.querySelectorAll(".numberButton");
-
-// Basic Math Functions
-function add(a, b) {
-    return a + b;
-}
-
-function subtract(a, b) {
-    return a - b;
-}
-
-function multiply(a, b) {
-    return a * b;
-}
-
-function divide(a, b) {
-    return a / b;
-}
+const numButtons = document.querySelectorAll(".numButton");
+const opButtons = document.querySelectorAll(".opButton");
+const calcButton = document.querySelector("#calcButton");
 
 
 // Calculator Functions
 function operate(a, operator, b) {
     switch(true) {
         case (operator === "+"):
-            return add(a, b);
+            return a + b;
         case (operator === "-"):
-            return subtract(a, b);
+            return a - b;
         case (operator === "*"):
-            return multiply(a, b);
+            return a * b;
         case (operator === "/"):
-            return divide(a, b);
+            return a / b;
     }
 }
 
-function populateDisplay(number) {
+function updateDisplay(number) {
     display.textContent += number;
     displayValue = parseInt(display.textContent);
 }
 
+function clearDisplay() {
+    display.textContent = null;
+    displayValue = null;
+    currentOperator = null;
+    inputA = null;
+    inputB = null;
+    operatorActive = false;
+}
+
 
 // Event Listeners
-numberButtons.forEach((button) => {
+clearButton.addEventListener("click", () => {
+    clearDisplay();
+});
+
+numButtons.forEach((button) => {
     button.addEventListener("click", () => {
-        populateDisplay(button.textContent);
+        if (operatorActive && (inputMode !== "B")) {
+            display.textContent = null;
+            displayValue = null;
+            inputMode = "B"
+        }
+        updateDisplay(button.textContent);
+        console.log(inputA, currentOperator, inputB);
     });
 }); 
 
-clearButton.addEventListener("click", () => {
-    display.textContent = "";
-    displayValue = null;
+opButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+        currentOperator = button.textContent;
+        inputA = displayValue;
+        operatorActive = true;
+        console.log(inputA, currentOperator, inputB);
+    });
+});
+
+calcButton.addEventListener("click", () => {
+        inputB = displayValue;
+        display.textContent = null;
+        displayValue = null;
+        updateDisplay(operate(inputA, currentOperator, inputB));
+        console.log(inputA, currentOperator, inputB);
+        inputMode = "A";
 });
