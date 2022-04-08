@@ -51,7 +51,7 @@ function clearAll() {
 }
 
 function updateDisplay(number) {
-    if (display.textContent === null || (display.textContent === "0" && number != ".")) {
+    if (display.textContent === null || (display.textContent === "0" && number != "." || resetDisplay === true)) {
         clearDisplay();
     } else if (number === "." && display.textContent.includes(".")) {
         return;
@@ -60,6 +60,7 @@ function updateDisplay(number) {
 }
 
 function calculate() {
+    removeActive();
     if (!currentOperator || resetDisplay){
         return;
     } else {
@@ -70,6 +71,17 @@ function calculate() {
         clearDisplay();
         updateDisplay(Math.round(total * 100000000000) / 100000000000);
     }
+}
+
+function handleOperator(button) {
+    if (currentOperator) {
+        calculate();
+    }
+    removeActive();
+    button.classList.add("active");
+    currentOperator = button.textContent;
+    firstOperand = display.textContent;
+    resetDisplay = true;
 }
 
 function removeActive() {
@@ -85,27 +97,34 @@ clearButton.addEventListener("click", () => {
 
 numButtons.forEach((button) => {
     button.addEventListener("click", () => {
-        if (resetDisplay === true) {
-            clearDisplay();
-        } 
         updateDisplay(button.textContent);
     });
 }); 
 
 opButtons.forEach((button) => {
     button.addEventListener("click", () => {
-        if (currentOperator) {
-            calculate();
-        }
-        removeActive();
-        button.classList.add("active");
-        currentOperator = button.textContent;
-        firstOperand = display.textContent;
-        resetDisplay = true;
+        handleOperator(button);
     });
 });
 
 calcButton.addEventListener("click", () => {
-    removeActive();
     calculate();
 });
+
+// Keypress Functions
+document.addEventListener("keydown", handleKeydown);
+
+function handleKeydown(e) {
+    switch(true) {
+        case (e.key >= 0 || e.key <= 9):
+            updateDisplay(e.key);
+            break;
+        case (e.key === "Backspace"):
+            display.textContent = display.textContent.slice(0, display.textContent.length - 1);
+            break;
+        case (e.key === "="):
+            calculate();
+            break;
+        // Handle operators
+    };
+}
