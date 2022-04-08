@@ -37,6 +37,7 @@ function operate(a, operator, b) {
 }
 
 function clearDisplay() {
+    removeActive();
     display.textContent = null;
     resetDisplay = false;
 }
@@ -64,12 +65,17 @@ function calculate() {
     } else {
         secondOperand = display.textContent;
         total = operate(firstOperand, currentOperator, secondOperand);
-        currentOperator = null;
         firstOperand = total;
-        secondOperand = null;
+        currentOperator = null;
         clearDisplay();
         updateDisplay(Math.round(total * 100000000000) / 100000000000);
     }
+}
+
+function removeActive() {
+    opButtons.forEach((button) => {
+        button.classList.remove("active");
+    });
 }
 
 // Event Listeners
@@ -91,6 +97,8 @@ opButtons.forEach((button) => {
         if (currentOperator) {
             calculate();
         }
+        removeActive();
+        button.classList.add("active");
         currentOperator = button.textContent;
         firstOperand = display.textContent;
         resetDisplay = true;
@@ -98,5 +106,6 @@ opButtons.forEach((button) => {
 });
 
 calcButton.addEventListener("click", () => {
+    removeActive();
     calculate();
 });
