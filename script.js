@@ -50,8 +50,10 @@ function clearAll() {
 }
 
 function updateDisplay(number) {
-    if (display.textContent === null || display.textContent === "0") {
+    if (display.textContent === null || (display.textContent === "0" && number != ".")) {
         clearDisplay();
+    } else if (number === "." && display.textContent.includes(".")) {
+        return;
     }
     display.textContent += number;
 }
@@ -66,7 +68,7 @@ function calculate() {
         firstOperand = total;
         secondOperand = null;
         clearDisplay();
-        updateDisplay(total);
+        updateDisplay(Math.round(total * 100000000000) / 100000000000);
     }
 }
 
