@@ -1,5 +1,53 @@
+html {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+main {
+    background-color: #1C1C1C;
+    width: 30vw;
+    height: 40vw;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+}
+
+main, button {
+    color: #FFFFFF;
+    font-size: 1.5em;
+    border: 1px solid #1C1C1C;
+}
+
+#clear, #negation, #percent {
+    background-color: #505050;
+}
+
+.numButton {
+    background-color: #D2D4D2;
+}
+
+.opButton, #calcButton {
+    background-color: #FF9500;
+}
+
+.span2 {
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
 #display {
-    height: 1em;
-    width: 150px;
-    border: 1px solid black;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0 2%;
+    font-size: 2em;
+    grid-column-start: 1;
+    grid-column-end: 5;
 }
