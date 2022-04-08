@@ -55,3 +55,7 @@ main, button {
 .activeOp {
     border: 3px solid #000000;
 }
+
+.buttonPress {
+    opacity: 0.8;
+}

@@ -8,6 +8,7 @@ let resetDisplay = false;
 
 // HTML Selectors
 const display = document.querySelector("#display");
+const allButtons = document.querySelectorAll("button");
 const allClearButton = document.querySelector("#allClear");
 const backspaceButton = document.querySelector("#backspace");
 const percentButton = document.querySelector("#percent");
@@ -16,6 +17,7 @@ const opButtons = document.querySelectorAll(".opButton");
 const calcButton = document.querySelector("#calcButton");
 
 display.textContent = null;
+
 
 // Calculator Functions
 function operate(a, operator, b) {
@@ -96,7 +98,20 @@ function removeActiveOp() {
     });
 }
 
+
 // Event Listeners
+allButtons.forEach((button) => {
+    button.addEventListener("mousedown", () => {
+        button.classList.add("buttonPress");
+    });
+    button.addEventListener("mouseup", () => {
+        button.classList.remove("buttonPress");
+    });
+    button.addEventListener("mouseout", () => {
+        button.classList.remove("buttonPress");
+    });
+});
+
 allClearButton.addEventListener("click", () => {
     allClear();
 });
@@ -126,6 +141,7 @@ opButtons.forEach((button) => {
 calcButton.addEventListener("click", () => {
     calculate();
 });
+
 
 // Keypress Functions
 document.addEventListener("keydown", handleKeydown);
