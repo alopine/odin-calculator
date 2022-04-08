@@ -8,7 +8,9 @@ let resetDisplay = false;
 
 // HTML Selectors
 const display = document.querySelector("#display");
-const clearButton = document.querySelector("#clear");
+const allClearButton = document.querySelector("#allClear");
+const backspaceButton = document.querySelector("#backspace");
+const percentButton = document.querySelector("#percent");
 const numButtons = document.querySelectorAll(".numButton");
 const opButtons = document.querySelectorAll(".opButton");
 const calcButton = document.querySelector("#calcButton");
@@ -30,24 +32,28 @@ function operate(a, operator, b) {
             if (b === 0) {
                 alert("You can't divide by 0!");
                 return 0;
-            } else{
+            } else {
                 return a / b;
             }
     }
 }
 
 function clearDisplay() {
-    removeActive();
+    removeActiveOp();
     display.textContent = null;
     resetDisplay = false;
 }
 
-function clearAll() {
+function allClear() {
     clearDisplay();
     firstOperand = null;
     secondOperand = null;
     currentOperator = null;
     total = null;
+}
+
+function backspaceClear() {
+    display.textContent = display.textContent.slice(0, display.textContent.length - 1);
 }
 
 function updateDisplay(number) {
@@ -60,7 +66,7 @@ function updateDisplay(number) {
 }
 
 function calculate() {
-    removeActive();
+    removeActiveOp();
     if (!currentOperator || resetDisplay){
         return;
     } else {
@@ -77,22 +83,32 @@ function handleOperator(button) {
     if (currentOperator) {
         calculate();
     }
-    removeActive();
-    button.classList.add("active");
+    removeActiveOp();
+    button.classList.add("activeOp");
     currentOperator = button.textContent;
     firstOperand = display.textContent;
     resetDisplay = true;
 }
 
-function removeActive() {
+function removeActiveOp() {
     opButtons.forEach((button) => {
-        button.classList.remove("active");
+        button.classList.remove("activeOp");
     });
 }
 
 // Event Listeners
-clearButton.addEventListener("click", () => {
-    clearAll();
+allClearButton.addEventListener("click", () => {
+    allClear();
+});
+
+backspaceButton.addEventListener("click", () => {
+    backspaceClear();
+});
+
+percentButton.addEventListener("click", () => {
+    total = operate(display.textContent, "÷", 100);
+    resetDisplay = true;
+    updateDisplay(Math.round(total * 100000000000) / 100000000000);
 });
 
 numButtons.forEach((button) => {
@@ -120,11 +136,22 @@ function handleKeydown(e) {
             updateDisplay(e.key);
             break;
         case (e.key === "Backspace"):
-            display.textContent = display.textContent.slice(0, display.textContent.length - 1);
+            backspaceClear();
             break;
-        case (e.key === "="):
+        case (e.key === "=" || e.key === "Enter"):
             calculate();
             break;
-        // Handle operators
+        case (e.key === "/"):
+            handleOperator(opButtons[0]);
+            break;
+        case (e.key === "*"):
+            handleOperator(opButtons[1]);
+            break;
+        case (e.key === "-"):
+            handleOperator(opButtons[2]);
+            break;
+        case (e.key === "+"):
+            handleOperator(opButtons[3]);
+            break;
     };
 }

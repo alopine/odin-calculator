@@ -25,7 +25,7 @@ main, button {
     border: 1px solid #1C1C1C;
 }
 
-#clear, #negation, #percent {
+#allClear, #backspace, #percent {
     background-color: #505050;
 }
 
@@ -52,6 +52,6 @@ main, button {
     grid-column-end: 5;
 }
 
-.active {
+.activeOp {
     border: 3px solid #000000;
 }
